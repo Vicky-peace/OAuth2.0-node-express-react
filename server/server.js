@@ -2,11 +2,16 @@ import express from "express";
 import cors from "cors";
 import passport from "passport";
 import session from "cookie-session";
+import dotenv from 'dotenv';
+import authRoute from "./routes/auth.js";
+
 
 const app = express();
+
+dotenv.config();
 app.use(session({
     name: 'session',
-    keys: ["devrel"],
+    keys: [process.env.SECRET],
     maxAge: 24 * 60 * 60* 100,
 }));
 
@@ -20,7 +25,7 @@ app.use(cors({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use("/auth", authRoute);
+app.use("/auth", authRoute);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
